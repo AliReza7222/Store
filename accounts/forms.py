@@ -4,10 +4,10 @@ from django.contrib.auth import get_user_model
 from django import forms
 
 
-class FormUser(forms.ModelForm):
+class RegisterUser(forms.ModelForm):
 
-    password1 = forms.CharField(max_length=15, min_length=7, widget=forms.PasswordInput())
-    password2 = forms.CharField(max_length=15, min_length=7, widget=forms.PasswordInput())
+    password1 = forms.CharField(max_length=15, min_length=7, widget=forms.PasswordInput(), label='Password')
+    password2 = forms.CharField(max_length=15, min_length=7, widget=forms.PasswordInput(), label='Repeat Password')
 
     class Meta:
         model = get_user_model()
@@ -41,7 +41,7 @@ class FormUser(forms.ModelForm):
     def clean_phone_number(self):
         phone_number = self.cleaned_data.get("phone_number")
 
-        if len(re.findall("^0911[0-9]+$", phone_number)) == 1:
+        if len(re.findall("^09[0-9]+$", phone_number)) == 1:
             return phone_number
         raise forms.ValidationError("The phone number must be Iranian and start with 0.")
 
