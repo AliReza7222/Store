@@ -1,5 +1,5 @@
 import re
-
+from .models import User
 from django.contrib.auth import get_user_model
 from django import forms
 
@@ -29,14 +29,13 @@ class RegisterUser(forms.ModelForm):
 
     def clean_username(self):
         username = self.cleaned_data.get('username')
-        try:
-            if len(re.findall("(?=.*[a-z])(?=.*[0-9]).+", username)) == 0:
-                raise forms.ValidationError("Username must contain numbers and letters.")
-            if len(username) < 4:
-                raise forms.ValidationError("Username length should be greater than 4 .")
-            return username
-        except :
+        if len(re.findall("(?=.*[a-zA-Z])(?=.*[0-9]).+", username)) == 0:
             raise forms.ValidationError("Username must contain numbers and letters.")
+        if len(username) < 4:
+            raise forms.ValidationError("Username length should be greater than 4 .")
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError("This username exists .")
+        return username
 
     def clean_phone_number(self):
         phone_number = self.cleaned_data.get("phone_number")
