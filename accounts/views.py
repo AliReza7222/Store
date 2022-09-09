@@ -31,6 +31,7 @@ class LoginUser(FormView):
             login(request, user)
             messages.success(request, 'login in site .')
             return redirect('home')
+        messages.error(request, 'The information entered is incorrect .')
         return redirect('login')
 
 

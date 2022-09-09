@@ -1,8 +1,16 @@
 <!-- messages -->
 {% for message in messages %}
-  <div class="success-msg">
-    <i class="fa fa-check"></i>
-    {{ message }}
-    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-  </div>
+  {% if message.tags == 'success' %}
+    <div class="success-msg">
+      <i class="fa fa-check"></i>
+      {{ message }}
+      <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+    </div>
+  {% elif message.tags == 'error' %}
+    <div class="error-msg">
+    <i class="fa fa-times-circle"></i>
+      {{ message }}
+      <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+    </div>
+  {% endif %}
 {% endfor %}
