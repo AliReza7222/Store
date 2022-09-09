@@ -16,4 +16,4 @@ class SignUpUser(CreateView):
             form.save()
             messages.success(request, message=f"you with username {data.get('username')} register in site .")
             return redirect('home')
-        return redirect('signup')
+        return render(request, 'signup.html', context={'form': form})

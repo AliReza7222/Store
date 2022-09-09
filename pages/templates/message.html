@@ -1,30 +1,12 @@
 <!-- messages -->
 {% for message in messages %}
-<div class="container-fluid p-0">
-  <div class="alert {{ message.tags }} alert-dismissible" role="alert" >
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="True">&times;</span>
-    </button>
-    {{ message }}
-  </div>
+<div class="alert success">
+		<input type="checkbox" id="alert2"/>
+		<label class="close" title="close" for="alert2">
+      <i class="icon-remove"></i>
+    </label>
+		<p class="inner">
+			{{ message }}
+		</p>
 </div>
 {% endfor %}
-
-<!-- Error messages -->
-{% if form.errors %}
-        <div class="alert alert-error">
-          <h4>Please fix the following errors</h4>
-          <ul>
-            {% for field in form %}
-              {% if field.errors %}
-                {% for error in field.errors %}
-                  <li><a href="#id_{{ field.name }}" class="error">{{ error|escape }}</a></li>
-                {% endfor %}
-              {% endif %}
-            {% endfor %}
-          </ul>
-          {% if form.non_field_errors %}
-            {{ form.non_field_errors }}
-          {% endif %}
-        </div>
-{% endif %}

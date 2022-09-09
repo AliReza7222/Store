@@ -30,7 +30,7 @@ class RegisterUser(forms.ModelForm):
     def clean_username(self):
         username = self.cleaned_data.get('username')
         try:
-            if username != re.findall("\w+", username)[0]:
+            if len(re.findall("(?=.*[a-z])(?=.*[0-9]).+", username)) == 0:
                 raise forms.ValidationError("Username must contain numbers and letters.")
             if len(username) < 4:
                 raise forms.ValidationError("Username length should be greater than 4 .")
@@ -41,9 +41,11 @@ class RegisterUser(forms.ModelForm):
     def clean_phone_number(self):
         phone_number = self.cleaned_data.get("phone_number")
 
-        if len(re.findall("^09[0-9]+$", phone_number)) == 1:
-            return phone_number
-        raise forms.ValidationError("The phone number must be Iranian and start with 0.")
+        if not len(re.findall("^09[0-9]+$", phone_number)) == 1:
+            raise forms.ValidationError("The phone number must be Iranian and start with 0.")
+        if len(phone_number) != 11:
+            raise forms.ValidationError("The number of numbers is wrong.")
+        return phone_number
 
     def save(self, commit=True):
         user = super().save(commit=False)
