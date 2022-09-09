@@ -52,3 +52,16 @@ class RegisterUser(forms.ModelForm):
         if commit:
             user.save()
         return user
+
+
+class LoginForm(forms.ModelForm):
+
+    class Meta:
+        model = get_user_model()
+        fields = ('username', 'email', 'password')
+        widgets = {
+            'password': forms.PasswordInput()
+        }
+        help_texts = {
+            'username': ' '
+        }
