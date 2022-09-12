@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-&047w+^kn(3#ea$khfgq=-p02zc(za$-2jye&-udsoykt&3sb!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -57,10 +57,10 @@ AUTHENTICATION_BACKENDS = {
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_USERNAME_REQUIRED = True
-ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
-
+DEFAULT_FROM_EMAIL = 'admin@djangobookstore.com'
 
 # django-crispy-forms
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
