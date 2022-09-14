@@ -1,0 +1,119 @@
+{% extends '_base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %} Profile {% endblock title %}
+{% block link %} <link rel="stylesheet" type="text/css" href="{% static 'css/profile.css' %}" /> {% endblock link %}
+{% block content %}
+    {% if not user.profile %}
+            <h2>Complete Profile {{ user }}</h2><br>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-row">
+                  <div class="form-group col-md-6 mb-0">
+                    {{ form.first_name|as_crispy_field }}
+                  </div>
+                  <div class="form-group col-md-6 mb-0">
+                    {{ form.last_name|as_crispy_field }}
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group col-md-6 mb-0">
+                    {{ form.phone|as_crispy_field }}
+                  </div>
+                  <div class="form-group col-md-6 mb-0">
+                    {{ form.gender|as_crispy_field }}
+                  </div>
+                </div>
+                {{ form.about|as_crispy_field }}
+                {{ form.address|as_crispy_field }}
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+            <br>
+    {% else %}
+        <h2>{{ user }}</h2><br>
+        <div class="col-md-8">
+              <div class="card mb-3">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Full Name</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                      {{ user.profile.first_name }} {{ user.profile.last_name }}
+                    </div>
+                  </div>
+                  <hr><br>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Email</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                      {{ user.email }}
+                    </div>
+                  </div>
+                  <hr><br>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Phone</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                        {{ user.profile.phone }}
+                    </div>
+                  </div>
+                  <hr><br>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Gender</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                      {{ user.profile.get_gender_display }}
+                    </div>
+                  </div>
+                  <hr><br>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Address</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                        {% if user.profile.address %}
+                            {{ user.profile.address }}
+                        {% else %}
+                            _____
+                        {% endif %}
+                    </div>
+                  </div>
+                  <hr><br>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">About me</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                        {% if user.profile.about %}
+                            {{ user.profile.about }}
+                        {% else %}
+                            _____
+                        {% endif %}
+                    </div>
+                  </div>
+                  <hr><br>
+                    <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Change Password</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                        <a href="{% url 'account_change_password' %}">click here</a>
+                    </div>
+                  </div>
+                  <hr><br>
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <a class="btn btn-info " target="__blank"
+                         href="#">Edit</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        </div>
+    {% endif %}
+{% endblock content %}
