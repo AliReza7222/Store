@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'accounts',
     'pages',
+    'books',
 ]
 
 # django-allauth config
