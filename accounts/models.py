@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
@@ -13,6 +14,11 @@ class Profile(models.Model):
     GENDER_CHOICE = (
         ('m', 'Male'),
         ('f', 'Female')
+    )
+    id = models.UUIDField(
+        primary_key=True,
+        editable=False,
+        default=uuid.uuid4
     )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=30)
