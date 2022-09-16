@@ -16,3 +16,8 @@ class BookAdmin(admin.ModelAdmin):
         'author',
         'price'
     ]
+
+
+@admin.register(Review)
+class ReviewAdminPanel(admin.ModelAdmin):
+    readonly_fields = ['author', 'book']
