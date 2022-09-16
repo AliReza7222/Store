@@ -19,6 +19,7 @@ class CreateProfile(LoginRequiredMixin, CreateView):
         profile_exists = Profile.objects.filter(user_id=user.id).exists()
         if form.is_valid():
             Profile.objects.update_or_create(user_id=user.id, defaults=form.cleaned_data)
+            message = ''
             if not profile_exists:
                 message = 'Your profile has been created successfully . '
             elif profile_exists:
