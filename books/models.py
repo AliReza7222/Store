@@ -2,6 +2,7 @@ import uuid
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth import get_user_model
+from accounts.models import User
 
 
 class Book(models.Model):
@@ -10,10 +11,17 @@ class Book(models.Model):
         default=uuid.uuid4,
         editable=False
     )
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     author = models.CharField(max_length=200)
+    about_book = models.TextField()
+    publication_date = models.DateField()
     price = models.DecimalField(max_digits=6, decimal_places=2)
-    cover = models.ImageField(upload_to='cover/')
+    cover = models.ImageField(upload_to='covers/')
+
+    def delete(self, using=None, keep_parents=False):
+        self.cover.storage.delete(str(self.cover.name))
+        return super().delete()
 
     def get_absolute_url(self):
         return reverse('book_detail', kwargs={'pk': str(self.pk)})

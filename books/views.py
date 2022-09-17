@@ -1,10 +1,28 @@
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.views.generic.edit import FormMixin
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Book, Review
-from .forms import ReviewForm
+from .forms import ReviewForm, FormRegisterBook
+
+
+class RegisterBook(LoginRequiredMixin, CreateView):
+    model = Book
+    login_url = '/accounts/login/'
+    template_name = 'books/register_book.html'
+    form_class = FormRegisterBook
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST, request.FILES)
+        if form.is_valid():
+            user, cover = request.user, request.FILES.get('cover')
+            data = form.cleaned_data
+            data['user'] = user
+            Book.objects.create(**data)
+            messages.success(request, 'your book has been successfully created .')
+            return redirect('books')
+        return render(request, self.template_name, context={'form': form})
 
 
 class BookListView(ListView):
