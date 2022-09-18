@@ -4,11 +4,14 @@
 {% block title %} {{ book.title }} {% endblock title %}
 
 {% block content %}
-    <div class="book-detail">
+    <div class="book-detail" style="text-align:center">
         <h2><a href="">{{ book.title }}</a></h2>
         <img src="{{ book.cover.url }}" class="bookcover" alt="{{ book.title }}" style="width:300px;height:400px">
-        <p>Author: {{ book.author }}</p>
-        <p>Price: {{ book.price }}$</p>
+        <br>
+        <p><strong>Author:</strong> {{ book.author }}</p>
+        <p><strong>Price:</strong> {{ book.price }}$</p>
+        <p><strong>publication_date:</strong> {{ book.publication_date }}</p>
+        <p><strong>about_book:</strong>{{ book.about_book }}</p>
     </div><hr><br>
 
     <div>

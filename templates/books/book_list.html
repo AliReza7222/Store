@@ -1,13 +1,25 @@
 {% extends '_base.html' %}
+{% load static %}
 
 {% block title %} Books {% endblock title %}
 
+{% block link %}
+        <link type="text/css" href="{% static 'css/book_list.css' %}" rel="stylesheet">
+{% endblock link %}
+
 {% block content %}
-    <a href="{% url 'create_book' %}">RegisterBook</a>
-    <hr>
-    {% for book in book_list %}
-        <div>
-            <h2><a href="{{ book.get_absolute_url }}">{{ book.title }}</a></h2>
+    <div class="container">
+        <h2>Books</h2><hr><br>
+        <div class="row">
+                {% for book in book_list %}
+                    <div class="column">
+                        <a href="{{ book.get_absolute_url }}">
+                        <img src="{{book.cover.url}}" class="bookcover"
+                             alt="{{ book.title }}" style="width:200px;height:200px"></a><br>
+                        <h5><a href="{{ book.get_absolute_url }}">more information </a></h5>
+                    </div>
+                {% endfor %}
         </div>
-    {% endfor %}
+        <br>
+    </div>
 {% endblock content %}

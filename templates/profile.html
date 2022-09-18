@@ -98,7 +98,7 @@
                         </div>
                       </div>
                       <hr><br>
-                        <div class="row">
+                      <div class="row">
                         <div class="col-sm-3">
                           <h6 class="mb-0">Change Password</h6>
                         </div>
@@ -108,8 +108,17 @@
                       </div>
                       <hr><br>
                       <div class="row">
+                        <div class="col-sm-3">
+                          <h6 class="mb-0">Register Book</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                            <a href="{% url 'create_book' %}">click here</a>
+                        </div>
+                      </div>
+                      <hr><br>
+                      <div class="row">
                         <div class="col-sm-12">
-                          <a class="btn btn-info " href="{% url 'update-profile' user.profile.id %}">Edit</a>
+                          <a class="btn btn-info " href="{% url 'update-profile' user.profile.id %}">Edit Profile</a>
                         </div>
                       </div>
                     </div>
