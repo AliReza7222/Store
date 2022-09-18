@@ -13,10 +13,11 @@
         <div class="row">
                 {% for book in book_list %}
                     <div class="column">
+                        <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
                         <a href="{{ book.get_absolute_url }}">
                         <img src="{{book.cover.url}}" class="bookcover"
                              alt="{{ book.title }}" style="width:200px;height:200px"></a><br>
-                        <h5><a href="{{ book.get_absolute_url }}">more information </a></h5>
+                        <a href="{{ book.get_absolute_url }}">more information </a>
                     </div>
                 {% endfor %}
         </div>

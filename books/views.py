@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.views.generic.edit import FormMixin
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Book, Review
 from .forms import ReviewForm, FormRegisterBook
@@ -53,3 +53,12 @@ class BookDetailView(LoginRequiredMixin, FormMixin, DetailView):
             return redirect(f'/books/{kwargs.get("pk")}/')
         messages.error(request, 'Error for create post.')
         return redirect(f'/books/{kwargs.get("pk")}/')
+
+
+class UpdateBook(LoginRequiredMixin, UpdateView):
+    login_url = '/accounts/login/'
+    model = Book
+    form_class = FormRegisterBook
+    template_name = 'books/register_book.html'
+    extra_context = {'update': True}
+    context_object_name = 'books'
