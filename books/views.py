@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.views.generic.edit import FormMixin
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Book, Review
 from .forms import ReviewForm, FormRegisterBook
@@ -50,9 +50,9 @@ class BookDetailView(LoginRequiredMixin, FormMixin, DetailView):
                 review=review
             )
             messages.success(request, 'Your comment has been successfully created.')
-            return redirect(f'/books/{kwargs.get("pk")}/')
+            return redirect('book_detail', pk=kwargs.get('pk'))
         messages.error(request, 'Error for create post.')
-        return redirect(f'/books/{kwargs.get("pk")}/')
+        return redirect('book_detail', pk=kwargs.get('pk'))
 
 
 class UpdateBook(LoginRequiredMixin, UpdateView):
@@ -62,3 +62,29 @@ class UpdateBook(LoginRequiredMixin, UpdateView):
     template_name = 'books/register_book.html'
     extra_context = {'update': True}
     context_object_name = 'books'
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        user = request.user
+        obj_book = Book.objects.get(pk=kwargs.get('pk'))
+        if user != obj_book.user:
+            messages.error(request, "you don't enter this page .")
+            return redirect('books')
+        return super().get(request, *args, **kwargs)
+
+
+class DeleteBook(LoginRequiredMixin, DeleteView):
+    model = Book
+    login_url = '/accounts/login/'
+    template_name = 'books/delete_object.html'
+    context_object_name = 'book'
+    success_url = '/books/'
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        user = request.user
+        obj_book = Book.objects.get(pk=kwargs.get('pk'))
+        if user != obj_book.user:
+            messages.error(request, "you don't enter this page .")
+            return redirect('books')
+        return super().get(request, *args, **kwargs)
