@@ -6,8 +6,8 @@ from django.contrib.auth import get_user_model
 class AdminUser(admin.ModelAdmin):
     fields = [
         ('username', 'password'),
-        ('first_name', 'last_name'),
         'email',
+        ('first_name', 'last_name'),
         ('is_active', 'is_staff', 'is_superuser'),
         'groups',
         'user_permissions'

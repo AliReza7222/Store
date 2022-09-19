@@ -22,11 +22,15 @@
 
     <div>
         <h3>Reviews</h3>
-        <ul>
-        {% for review in book.reviews.all %}
-            <li><strong>{{ review.author }} :</strong> {{ review.review }}</li>
-        {% endfor %}
-        </ul>
+        {% if book.reviews.all %}
+            <ul>
+            {% for review in book.reviews.all %}
+                <li><strong>{{ review.author }} :</strong> {{ review.review }}</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No review has been registered yet.</p>
+        {% endif %}
     </div>
 
     <br><hr>
