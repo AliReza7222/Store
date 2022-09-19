@@ -1,5 +1,6 @@
 from django.shortcuts import redirect, render
 from django.contrib import messages
+from django.db.models import Q
 from django.views.generic.edit import FormMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -88,3 +89,27 @@ class DeleteBook(LoginRequiredMixin, DeleteView):
             messages.error(request, "you don't enter this page .")
             return redirect('books')
         return super().get(request, *args, **kwargs)
+
+
+class MyBooks(LoginRequiredMixin, ListView):
+    login_url = 'login'
+    model = Book
+    template_name = 'books/my_books.html'
+    context_object_name = 'books'
+
+    def get_queryset(self):
+        user = self.request.user
+        my_books = self.model.objects.filter(user=user)
+        return my_books
+
+
+class SearchBook(ListView):
+    model = Book
+    template_name = 'books/search_books.html'
+    context_object_name = 'books_list'
+
+    def get_queryset(self):
+        query_key = self.request.GET.get('search_input')
+        return Book.objects.filter(
+            Q(title__icontains=query_key) | Q(author__icontains=query_key)
+        )

@@ -1,0 +1,30 @@
+{% extends '_base.html' %}
+{% load static %}
+
+{% block title %}
+    MyInfo
+{% endblock %}
+
+{% block link %}
+        <link type="text/css" href="{% static 'css/book_list.css' %}" rel="stylesheet">
+{% endblock link %}
+
+
+{% block content %}
+    <h2>My Books In Site</h2>
+    {% if books %}
+        {% for book in books %}
+               <div class="column">
+                    <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
+                    <a href="{{ book.get_absolute_url }}">
+                    <img src="{{book.cover.url}}" class="bookcover"
+                         alt="{{ book.title }}" style="width:200px;height:200px"></a><br>
+                    <a href="{{ book.get_absolute_url }}">more information </a>
+               </div>
+        {% endfor %}
+    {% else %}
+        <br>
+        <p>you don't registered book in site .</p>
+    {% endif %}
+    <br>
+{% endblock content %}
