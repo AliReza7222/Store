@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-    MyBooks
+    My Favourite Books
 {% endblock %}
 
 {% block link %}
@@ -12,7 +12,7 @@
 
 
 {% block content %}
-    <h2>My Books In Site</h2>
+    <h2>My Favourite Books In Site</h2>
     <hr><br>
     {% if books %}
         {% for book in books %}
@@ -26,7 +26,7 @@
         {% endfor %}
     {% else %}
         <br>
-        <p>you don't register book in site .</p>
+        <p>No books have been selected .</p>
     {% endif %}
     <br>
 {% endblock content %}

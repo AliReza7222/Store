@@ -1,9 +1,10 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib import messages
 from django.db.models import Q
 from django.views.generic.edit import FormMixin
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseRedirect
 from .models import Book, Review
 from .forms import ReviewForm, FormRegisterBook
 
@@ -113,3 +114,32 @@ class SearchBook(ListView):
         return Book.objects.filter(
             Q(title__icontains=query_key) | Q(author__icontains=query_key)
         )
+
+
+class FavouriteBook(LoginRequiredMixin, FormView):
+    login_url = 'login'
+    model = Book
+    template_name = 'books/book_detail.html'
+
+    def get(self, request, *args, **kwargs):
+        book = get_object_or_404(Book, pk=kwargs.get('pk'))
+        if book.favourites.filter(pk=request.user.pk).exists():
+            messages.success(request, 'this book remove of your favourite books .')
+            book.favourites.remove(request.user)
+            return HttpResponseRedirect(request.META['HTTP_REFERER'])
+        else:
+            messages.success(request, 'this book add to your favourite books .')
+            book.favourites.add(request.user)
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+
+class MyFavouriteBooks(LoginRequiredMixin, ListView):
+    login_url = 'login'
+    model = Book
+    template_name = 'books/my_fav.html'
+    context_object_name = 'books'
+
+    def get_queryset(self):
+        user = self.request.user
+        fav_books = Book.objects.filter(favourites=user)
+        return fav_books

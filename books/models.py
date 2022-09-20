@@ -17,6 +17,7 @@ class Book(models.Model):
     about_book = models.TextField()
     publication_date = models.DateField()
     price = models.DecimalField(max_digits=6, decimal_places=2)
+    favourites = models.ManyToManyField(User, related_name='favourite', default=None, blank=True)
     cover = models.ImageField(upload_to='covers/')
 
     def delete(self, using=None, keep_parents=False):
