@@ -3,7 +3,10 @@
 {% load crispy_forms_tags %}
 
 {% block title %} Profile {% endblock title %}
-{% block link %} <link rel="stylesheet" type="text/css" href="{% static 'css/profile.css' %}" /> {% endblock link %}
+{% block link %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/profile.css' %}" />
+    <link rel="icon" type="image/x-icon" href="{% static 'img/1250689.png' %}">
+{% endblock link %}
 {% block content %}
     {% if not update %}
         {% if not user.profile %}
