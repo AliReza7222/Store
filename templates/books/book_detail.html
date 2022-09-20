@@ -12,7 +12,6 @@
         <p><strong>Price:</strong> {{ book.price }}$</p>
         <p><strong>publication_date:</strong> {{ book.publication_date }}</p>
         <p><strong>about_book:</strong>{{ book.about_book }}</p>
-        <p><strong>owner_book:</strong>{{ book.user }}</p>
         {% if book.user == user %}
             <a href="{% url 'update_book' book.id %}">Update Book</a>
             <br>

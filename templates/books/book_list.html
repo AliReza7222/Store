@@ -5,6 +5,8 @@
 
 {% block link %}
         <link type="text/css" href="{% static 'css/book_list.css' %}" rel="stylesheet">
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 {% endblock link %}
 
 {% block content %}
@@ -14,11 +16,10 @@
                 <h2>Books</h2>
             </div>
             <div class="col">
-                <form class="form-inline mt-2 mt-md-0"
-                      action="{% url 'search_results' %}" method="get">
-                    <input name="search_input" class="form-control mr-sm-2"
-                           type="text" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-primary" type="submit">search</button>
+                <form class="search" action="{% url 'search_results' %}" method="get"
+                style="margin:auto;max-width:300px;height:20px">
+                    <input name="search_input" type="text" placeholder="Search" aria-label="Search">
+                    <button type="submit"><i class="fa fa-search"></i></button>
                 </form>
             </div>
         </div>
