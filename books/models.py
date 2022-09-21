@@ -12,7 +12,7 @@ class Book(models.Model):
         editable=False
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=33)
     author = models.CharField(max_length=200)
     about_book = models.TextField()
     publication_date = models.DateField()

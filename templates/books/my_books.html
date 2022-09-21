@@ -13,17 +13,35 @@
 
 {% block content %}
     <h2>My Books In Site</h2>
-    <hr><br>
+    <br>
     {% if books %}
-        {% for book in books %}
-               <div class="column">
-                    <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
-                    <a href="{{ book.get_absolute_url }}">
-                    <img src="{{book.cover.url}}" class="bookcover"
-                         alt="{{ book.title }}" style="width:200px;height:200px"></a><br>
-                    <a href="{{ book.get_absolute_url }}">more information </a>
-               </div>
-        {% endfor %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                  <th scope="col">Num</th>
+                  <th scope="col">Title</th>
+                  <th scope="col">Author</th>
+                  <th scope="col">Publication Date</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Update</th>
+                  <th scope="col">Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for book in books %}
+                    <tr>
+                      <th scope="row">{{ forloop.counter }}</th>
+                      <td><a href="{{ book.get_absolute_url }}">{{ book.title }}</a></td>
+                      <td>{{ book.author }}</td>
+                      <td>{{ book.publication_date }}</td>
+                      <td>{{ book.price }}$</td>
+                      <td><a href="{% url 'update_book' book.id %}">Update</a></td>
+                      <td><a href="{% url 'delete_book' book.id %}" style="color:red">Delete</a></td>
+                      <td></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     {% else %}
         <br>
         <p>you don't register book in site .</p>

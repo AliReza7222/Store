@@ -12,17 +12,10 @@
         <p><strong>Price:</strong> {{ book.price }}$</p>
         <p><strong>publication_date:</strong> {{ book.publication_date }}</p>
         <p><strong>about_book:</strong>{{ book.about_book }}</p>
-        {% if book.user == user %}
-            <a href="{% url 'update_book' book.id %}">Update Book</a>
-            <br>
-            <a href="{% url 'delete_book' book.id %}" style="color:red">Delete Book</a>
-        {% endif %}
         {% if user in book.favourites.all %}
-            <br><br>
             <a href="{% url 'favourite_book' book.pk %}"
                class="btn btn-danger">Remove of Favourite</a>
         {% else %}
-            <br><br>
             <a href="{% url 'favourite_book' book.pk %}" class="btn btn-outline-primary">Add To Favourite</a>
         {% endif %}
     </div><hr><br>
