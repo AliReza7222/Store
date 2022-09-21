@@ -29,6 +29,7 @@ class RegisterBook(LoginRequiredMixin, CreateView):
 
 class BookListView(ListView):
     model = Book
+    paginate_by = 20
     template_name = 'books/book_list.html'
     context_object_name = 'book_list'
 

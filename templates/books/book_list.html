@@ -38,4 +38,27 @@
         </div>
         <br>
     </div>
+    <hr>
+    <div class="pagination" style="padding-left: 480px;">
+        <span class="step-links">
+            <span class="current">
+                <h5>
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </h5>
+            </span>
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                <br>
+            {% endif %}
+            {% if page_obj.has_next %}
+                &nbsp;&nbsp;
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+    <hr><br>
 {% endblock content %}
