@@ -93,7 +93,7 @@ class DeleteBook(LoginRequiredMixin, DeleteView):
 
 
 class MyBooks(LoginRequiredMixin, ListView):
-    login_url = 'login'
+    login_url = '/accounts/login/'
     model = Book
     template_name = 'books/my_books.html'
     context_object_name = 'books'
@@ -117,7 +117,7 @@ class SearchBook(ListView):
 
 
 class FavouriteBook(LoginRequiredMixin, FormView):
-    login_url = 'login'
+    login_url = '/accounts/login/'
     model = Book
     template_name = 'books/book_detail.html'
 

@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block link %}
-        <link type="text/css" href="{% static 'css/book_list.css' %}" rel="stylesheet">
+        <link type="text/css" href="{% static 'css/books_fav.css' %}" rel="stylesheet">
         <link rel="icon" type="image/x-icon" href="{% static 'img/29302.png' %}">
 {% endblock link %}
 
@@ -16,13 +16,20 @@
     <hr><br>
     {% if books %}
         {% for book in books %}
-               <div class="column">
-                    <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
-                    <a href="{{ book.get_absolute_url }}">
-                    <img src="{{book.cover.url}}" class="bookcover"
-                         alt="{{ book.title }}" style="width:200px;height:200px"></a><br>
-                    <a href="{{ book.get_absolute_url }}">more information </a>
-               </div>
+               <div class="row">
+                   <a href="{{ book.get_absolute_url }}">
+                   <img src="{{book.cover.url}}" class="bookcover"
+                        alt="{{ book.title }}" style="width:200px;height:200px"></a><br>
+                   <div class="right-option">
+                       <h5><a href="{{ book.get_absolute_url }}">
+                           {{ book.title }}
+                       </a></h5>
+                       <h6><strong>author :</strong>  {{ book.author }}</h6>
+                       <h6><strong>publication_date :</strong>  {{ book.publication_date }}</h6>
+                       <h6><strong>price :</strong>  {{ book.price }}$</h6>
+                       <a href="{{ book.get_absolute_url }}">more information</a>
+                   </div>
+               </div><hr><br>
         {% endfor %}
     {% else %}
         <br>
