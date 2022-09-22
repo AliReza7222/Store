@@ -95,6 +95,7 @@ class DeleteBook(LoginRequiredMixin, DeleteView):
 
 class MyBooks(LoginRequiredMixin, ListView):
     login_url = '/accounts/login/'
+    paginate_by = 30
     model = Book
     template_name = 'books/my_books.html'
     context_object_name = 'books'
@@ -139,6 +140,7 @@ class MyFavouriteBooks(LoginRequiredMixin, ListView):
     model = Book
     template_name = 'books/my_fav.html'
     context_object_name = 'books'
+    paginate_by = 20
 
     def get_queryset(self):
         user = self.request.user

@@ -1,0 +1,39 @@
+.pagination {
+  margin: 7px 0 15px 0;
+}
+.pagination,
+.pagination li a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.pagination li {
+  list-style: none;
+}
+.pagination li a {
+  text-decoration: none;
+  height: 50px;
+  width: 50px;
+  font-size: 17px;
+  padding-top: 1px;
+  border-right-width: 0px;
+}
+.pagination li:last-child a {
+  border-right-width: 1px;
+}
+.pagination li a:focus,
+
+.pagination li.icon a {
+  min-width: 120px;
+}
+.pagination li:first-child span {
+  padding-right: 8px;
+}
+.pagination li:last-child span {
+  padding-left: 8px;
+}
+
+.center {
+    text-align: center;
+}

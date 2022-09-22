@@ -6,6 +6,7 @@
 {% block link %}
          <link rel="icon" type="image/x-icon" href="{% static 'img/29302.png' %}">
         <link type="text/css" href="{% static 'css/book_list.css' %}" rel="stylesheet">
+        <link type="text/css" href="{% static 'css/pageination.css' %}" rel="stylesheet">
         <link rel="stylesheet"
               href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 {% endblock link %}
@@ -39,26 +40,22 @@
         <br>
     </div>
     <hr>
-    <div class="pagination" style="padding-left: 480px;">
-        <span class="step-links">
-            <span class="current">
-                <h5>
-                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                </h5>
-            </span>
+    <div>
+        <h6 class="center">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} .
+        </h6>
+        <ul class="pagination">
             {% if page_obj.has_previous %}
-                <a href="?page=1">&laquo; first</a>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-                <br>
+                <li class="icon">
+                    <a href="?page={{ page_obj.previous_page_number }}">&laquo; Previous</a>
+                </li>
             {% endif %}
             {% if page_obj.has_next %}
-                &nbsp;&nbsp;
-                <a href="?page={{ page_obj.next_page_number }}">next</a>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                <li class="icon">
+                    <a href="?page={{ page_obj.next_page_number }}">Next &raquo;</a>
+                </li>
             {% endif %}
-        </span>
+        </ul>
     </div>
-    <hr><br>
+    <hr>
 {% endblock content %}
