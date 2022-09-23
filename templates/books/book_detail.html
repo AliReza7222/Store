@@ -20,6 +20,17 @@
         {% endif %}
     </div><hr><br>
 
+    <div>
+        <h3>Create Review For <a href="">{{ book.title }}</a></h3>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.review|as_crispy_field }}
+            <button type="submit" class="btn btn-primary">Create</button>
+        </form>
+    </div>
+
+    <br><hr>
+
     <div style="word-wrap: break-word">
         <h3>Reviews</h3>
         {% if book.reviews.all %}
@@ -36,15 +47,5 @@
         {% endif %}
     </div>
 
-    <br><hr>
-
-    <div>
-        <h3>Create Review For <a href="">{{ book.title }}</a></h3>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.review|as_crispy_field }}
-            <button type="submit" class="btn btn-primary">Create</button>
-        </form>
-    </div>
-    <br>
+    <hr><br>
 {% endblock content %}
