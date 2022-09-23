@@ -20,12 +20,15 @@
         {% endif %}
     </div><hr><br>
 
-    <div>
+    <div style="word-wrap: break-word">
         <h3>Reviews</h3>
         {% if book.reviews.all %}
             <ul>
             {% for review in book.reviews.all %}
-                <li><strong>{{ review.author }} :</strong> {{ review.review }}</li>
+                <li>
+                        <strong>{{ review.author }} :</strong>
+                        {{ review.review }} ({{ review.date }})
+                </li><br>
             {% endfor %}
             </ul>
         {% else %}

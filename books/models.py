@@ -38,6 +38,7 @@ class Review(models.Model):
         related_name='reviews'
     )
     review = models.TextField()
+    date = models.DateField(auto_now=True)
     author = models.ForeignKey(
         get_user_model(),
         on_delete=models.CASCADE
