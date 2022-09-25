@@ -114,7 +114,7 @@ class SearchBook(ListView):
     def get_queryset(self):
         query_key = self.request.GET.get('search_input')
         return Book.objects.filter(
-            Q(title__icontains=query_key) | Q(author__icontains=query_key)
+            Q(title__icontains=query_key)
         )
 
 
