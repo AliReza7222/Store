@@ -19,6 +19,7 @@
         <table class="table table-striped">
             <thead>
                 <tr>
+                  <th scope="col">Book</th>
                   <th scope="col">Title</th>
                   <th scope="col">Author</th>
                   <th scope="col">Publication Date</th>
@@ -30,6 +31,7 @@
             <tbody>
                 {% for book in books %}
                     <tr>
+                      <td><img class="custom_img" src="{{ book.cover.url }}" alt="{{ book.title }}"></td>
                       <td><a href="{{ book.get_absolute_url }}">{{ book.title }}</a></td>
                       <td>{{ book.author }}</td>
                       <td>{{ book.publication_date }}</td>
