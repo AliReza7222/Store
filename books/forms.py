@@ -11,6 +11,7 @@ class FormRegisterBook(forms.ModelForm):
             'about_book',
             'publication_date',
             'price',
+            'quantity',
             'cover'
         ]
         widgets = {

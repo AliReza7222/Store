@@ -16,6 +16,7 @@ class Book(models.Model):
     author = models.CharField(max_length=200)
     about_book = models.TextField()
     publication_date = models.DateField()
+    quantity = models.PositiveIntegerField(default=1)
     price = models.DecimalField(max_digits=6, decimal_places=2)
     favourites = models.ManyToManyField(User, related_name='favourite', default=None, blank=True)
     cover = models.ImageField(upload_to='covers/')

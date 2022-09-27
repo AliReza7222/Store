@@ -29,7 +29,13 @@
               </div>
             </div>
             {{ form.about_book|as_crispy_field }}
+            <div class="form-row">
+              <div class="form-group col-md-6 mb-0">
+                  {{ form.quantity|as_crispy_field }}
+              </div>
+            </div>
             {{ form.cover|as_crispy_field }}
+            <br>
             {% if not update %}
                 <button class="btn btn-primary" type="submit">Create</button>
             {% elif update %}

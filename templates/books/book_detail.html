@@ -7,11 +7,16 @@
     <div class="book-detail" style="text-align:center">
         <h2><a href="">{{ book.title }}</a></h2>
         <img src="{{ book.cover.url }}" class="bookcover" alt="{{ book.title }}" style="width:300px;height:400px">
-        <br>
-        <p><strong>Author:</strong> {{ book.author }}</p>
-        <p><strong>Price:</strong> {{ book.price }}$</p>
-        <p><strong>publication_date:</strong> {{ book.publication_date }}</p>
-        <p><strong>about_book:</strong>{{ book.about_book }}</p>
+        <br><br>
+        <p><strong>Author :</strong> {{ book.author }}</p>
+        <p><strong>Price :</strong> {{ book.price }}$</p>
+        <p><strong>publication_date :</strong> {{ book.publication_date }}</p>
+        {% if book.quantity > 0 %}
+            <p><strong>Available amount :</strong>{{ book.quantity }}</p>
+        {% elif book.quantity == 0 %}
+            <p><strong>Available amount :</strong> <strong style="color:red">it is finished</strong></p>
+        {% endif %}
+        <p><strong>about_book :</strong>{{ book.about_book }}</p>
         {% if user in book.favourites.all %}
             <a href="{% url 'favourite_book' book.pk %}"
                class="btn btn-danger">Remove of Favourite</a>
