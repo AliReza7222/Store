@@ -266,9 +266,6 @@ GitHub.sublime-settings
 .history
 .idea
 
-# files migrations
-migrations/
-
 # staticfiles
 staticfiles/
 
