@@ -15,7 +15,7 @@ class UserProfile(forms.ModelForm):
             'gender'
         )
         help_texts = {
-            'phone': 'The phone number must be Iranian .'
+            'phone': 'The phone number must be Iranian and start with 09 .'
         }
 
     def clean_phone(self):
