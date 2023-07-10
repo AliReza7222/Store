@@ -46,3 +46,71 @@ form.search::after {
   clear: both;
   display: table;
 }
+
+.cover_image_custom{
+  width:200px;
+  height:200px;
+  border-radius: 8px;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.book-title {
+    margin-bottom: 10px;
+    text-decoration: none;
+    color: #000;
+    font-weight: bold;
+}
+
+.cover_image_custom {
+    margin-bottom: 10px;
+}
+
+.more-info {
+    text-decoration: none;
+    color: #000;
+    font-weight: bold;
+}
+
+.a-link,
+.a-link2 {
+    color: #353332;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    text-decoration: none;
+}
+
+.a-link:before,
+.a-link2:before {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #16B0D3;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease-in-out;
+    text-decoration: none;
+}
+
+.a-link:hover:before {
+    transform: scaleX(1);
+}
+
+.a-link:hover,
+.a-link2:hover{
+    color:#16B0D3;
+    text-decoration: none;
+}

@@ -28,13 +28,20 @@
         <hr><br>
         <div class="row">
                 {% for book in book_list %}
-                    <div class="column">
-                        <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
-                        <a href="{{ book.get_absolute_url }}">
-                        <img src="{{book.cover.url}}" class="bookcover"
-                             alt="{{ book.title }}" style="width:200px;height:200px"></a><br>
-                        <a href="{{ book.get_absolute_url }}">more information </a>
-                    </div>
+                      <div class="column">
+                              <a href="{{ book.get_absolute_url }}" class="book-title a-link2">
+                                  {% if book.title|length > 14 %}
+                                        <b>{{ book.title|slice:":14" }}....</b>
+                                  {% else %}
+                                        <b>{{ book.title }}</b>
+                                  {% endif %}
+                              </a>
+                              <a href="{{ book.get_absolute_url }}">
+                                  <img src="{{book.cover.url}}" class="cover_image_custom" alt="{{ book.title }}">
+                              </a>
+                              <br>
+                              <a href="{{ book.get_absolute_url }}" class="more-info a-link">more information</a>
+                        </div>
                 {% endfor %}
         </div>
         <br>
