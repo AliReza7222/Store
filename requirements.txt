@@ -2,7 +2,7 @@ appdirs==1.4.4
 asgiref==3.5.2
 asttokens==2.0.8
 backcall==0.2.0
-backports.zoneinfo==0.2.1
+backports.zoneinfo;python_version<"3.9"
 baron==0.10.1
 certifi==2022.6.15.1
 cffi==1.15.1
