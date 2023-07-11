@@ -114,3 +114,15 @@ form.search::after {
     color:#16B0D3;
     text-decoration: none;
 }
+
+
+.btn-green{
+  color: green;
+  background-color: white;
+  border-color: green;
+}
+
+.btn-green:hover {
+  color: white;
+  background-color: green;
+}
