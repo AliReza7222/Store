@@ -1,10 +1,12 @@
+from logging import Logger
+
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib import messages
 from django.db.models import Q
 from django.views.generic.edit import FormMixin
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, FormView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, FormView, RedirectView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect, HttpResponseGone
 from .models import Book, Review
 from .forms import ReviewForm, FormRegisterBook
 
@@ -40,6 +42,15 @@ class BookDetailView(LoginRequiredMixin, FormMixin, DetailView):
     form_class = ReviewForm
     template_name = 'books/book_detail.html'
     context_object_name = 'book'
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        my_cart = request.session.get(f'{request.user}_cart', ['None'])
+        if 'None' not in my_cart:
+            my_cart = list(map(lambda book_id: Book.objects.get(id=book_id), my_cart))
+        context['my_cart'] = my_cart
+        return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
         book = Book.objects.get(id=kwargs.get('pk'))
@@ -146,3 +157,24 @@ class MyFavouriteBooks(LoginRequiredMixin, ListView):
         user = self.request.user
         fav_books = Book.objects.filter(favourites=user)
         return fav_books
+
+
+class AddToCart(LoginRequiredMixin, RedirectView):
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        book = Book.objects.get(pk=kwargs.get('book_pk'))
+        my_cart = request.session.get(f'{user}_cart', [])
+        my_cart.append(str(book.id))
+        request.session[f'{user}_cart'] = my_cart
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+
+class RemoveFromCart(LoginRequiredMixin, RedirectView):
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        book_id = str(Book.objects.get(pk=kwargs.get('book_pk')).id)
+        my_cart = request.session.get(f'{user}_cart')
+        del my_cart[my_cart.index(book_id)]
+        request.session[f'{user}_cart'] = my_cart
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])
