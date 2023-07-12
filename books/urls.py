@@ -10,8 +10,8 @@ from .views import (
         FavouriteBook,
         MyFavouriteBooks,
         AddToCart,
-        RemoveFromCart
     )
+
 
 urlpatterns = [
     path('', BookListView.as_view(), name='books'),
@@ -24,5 +24,4 @@ urlpatterns = [
     path('fav/<uuid:pk>/', FavouriteBook.as_view(), name='favourite_book'),
     path('my_fav/', MyFavouriteBooks.as_view(), name='my_fav'),
     path('add_cart/<uuid:book_pk>/', AddToCart.as_view(), name='add_cart'),
-    path('remove_from_cart/<uuid:book_pk>/', RemoveFromCart.as_view(), name='remove_from_cart')
 ]

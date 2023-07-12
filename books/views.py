@@ -166,15 +166,6 @@ class AddToCart(LoginRequiredMixin, RedirectView):
         my_cart = request.session.get(f'{user}_cart', [])
         my_cart.append(str(book.id))
         request.session[f'{user}_cart'] = my_cart
-        return HttpResponseRedirect(request.META['HTTP_REFERER'])
-
-
-class RemoveFromCart(LoginRequiredMixin, RedirectView):
-
-    def get(self, request, *args, **kwargs):
-        user = request.user
-        book_id = str(Book.objects.get(pk=kwargs.get('book_pk')).id)
-        my_cart = request.session.get(f'{user}_cart')
-        del my_cart[my_cart.index(book_id)]
-        request.session[f'{user}_cart'] = my_cart
+        message = f'book {book} add to your cart .'
+        messages.success(request, message)
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
