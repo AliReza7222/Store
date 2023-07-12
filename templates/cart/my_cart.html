@@ -1,0 +1,58 @@
+{% extends '_base.html' %}
+{% load static %}
+
+{% block title %} cart shopping {% endblock %}
+
+{% block link %}
+        <link type="text/css" href="{% static 'css/book_list.css' %}" rel="stylesheet">
+        <link rel="icon" type="image/x-icon" href="{% static 'img/29302.png' %}">
+{% endblock link %}
+
+
+{% block content %}
+    <h2>Your Cart</h2>
+    <div class="alert alert-warning" role="alert">
+        The books in your shopping cart are not registered and may run out, so finalize the purchase as soon as possible.
+    </div>
+    <br>
+    {% if my_cart %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                  <th scope="col">Book</th>
+                  <th scope="col">Title</th>
+                  <th scope="col">Author</th>
+                  <th scope="col">Publication Date</th>
+                  <th scope="col">Price</th>
+                  <th scope='col'>Remove</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for book in my_cart %}
+                    <tr>
+                      <td><img class="custom_img" src="{{ book.cover.url }}" alt="{{ book.title }}"></td>
+                      <td><a href="{{ book.get_absolute_url }}">
+                        {% if book.title|length > 14 %}
+                              <b>{{ book.title|slice:":14" }}....</b>
+                        {% else %}
+                              <b>{{ book.title }}</b>
+                        {% endif %}
+                      </a></td>
+                      <td>{{ book.author }}</td>
+                      <td>{{ book.publication_date }}</td>
+                      <td>{{ book.price }}$</td>
+                      <td>
+                        <a href="{% url 'remove_from_cart' book.id %}" class='rm_a' >&ensp;&ensp;X</a>
+                      </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <hr>
+        <div class="alert alert-primary" role="alert">
+            You don't have any book in cart !
+        </div>
+    {% endif %}
+    <br>
+{% endblock content %}

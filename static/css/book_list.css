@@ -126,3 +126,14 @@ form.search::after {
   color: white;
   background-color: green;
 }
+
+.rm_a{
+  font-weight: bold;
+  color: red;
+}
+
+.rm_a:hover{
+    text-decoration: none;
+    font-weight: bold;
+    color:#FA360B
+}
