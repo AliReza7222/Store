@@ -79,6 +79,13 @@ form.search::after {
     font-weight: bold;
 }
 
+.continuo_a{
+  color:green;
+  border: green;
+  font-size: 20px;
+  font-weight: bold;
+}
+
 .a-link,
 .a-link2 {
     color: #353332;
@@ -110,7 +117,8 @@ form.search::after {
 }
 
 .a-link:hover,
-.a-link2:hover{
+.a-link2:hover,
+.continuo_a:hover{
     color:#16B0D3;
     text-decoration: none;
 }
@@ -127,13 +135,52 @@ form.search::after {
   background-color: green;
 }
 
-.rm_a{
-  font-weight: bold;
-  color: red;
+
+.icon_rm{
+  width: 20px;
+  height: 20px;
 }
 
 .rm_a:hover{
     text-decoration: none;
-    font-weight: bold;
-    color:#FA360B
 }
+
+.input_q[type="number"] {
+  padding: 8px;
+  width: 70px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.input_q[type="number"]:focus {
+  outline: none;
+  box-shadow: 0 0 10px #6cb2eb;
+}
+
+.increment-button,
+  .decrement-button {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    background-color: #f1f1f1;
+    color: #555;
+    cursor: pointer;
+    border-radius: 3px;
+  }
+
+  .increment-button:hover,
+  .decrement-button:hover {
+    background-color: #ddd;
+  }
+
+  .number-input {
+    display: inline-block;
+    width: 58px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    padding: 2px;
+    margin: 0 5px;
+  }

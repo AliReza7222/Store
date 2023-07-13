@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import RedirectView
 from django.http import HttpResponseRedirect
@@ -9,15 +9,22 @@ from books.models import Book
 
 class CartShopping(LoginRequiredMixin, RedirectView):
 
+    def uniq_list(self, value):
+        new_list = list()
+        for index_value in value:
+            if index_value not in new_list:
+                new_list.append(index_value)
+        return new_list
+
     def get(self, request, *args, **kwargs):
         user = request.user
         context = dict()
-        my_cart = list(map(lambda book_id: Book.objects.get(id=book_id), request.session.get(f'{user}_cart')))
+        my_cart = list(map(lambda book_id: Book.objects.get(id=book_id), request.session.get(f'{user}_cart', [])))
         total_price = 0
         for book in my_cart:
             total_price += book.price
-        print(total_price)
-        context['my_cart'] = my_cart
+        context['total_price'] = total_price
+        context['my_cart'] = self.uniq_list(my_cart)
         return render(request, 'cart/my_cart.html', context=context)
 
 
@@ -33,3 +40,18 @@ class RemoveFromCart(LoginRequiredMixin, RedirectView):
         message = f'book {book} remove from your cart .'
         messages.success(request, message)
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+
+class IncrementDecrementBook(LoginRequiredMixin, RedirectView):
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        op, id_book = kwargs.get('op'), str(kwargs.get('id_book'))
+        my_cart = request.session[f'{request.user}_cart']
+        if op == 'up':
+            my_cart.append(id_book)
+        elif op == 'down':
+            del my_cart[my_cart.index(id_book)]
+        request.session[f'{request.user}_cart'] = my_cart
+
+        return redirect('my_cart')
