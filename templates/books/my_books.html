@@ -32,8 +32,20 @@
                 {% for book in books %}
                     <tr>
                       <td><img class="custom_img" src="{{ book.cover.url }}" alt="{{ book.title }}"></td>
-                      <td><a href="{{ book.get_absolute_url }}">{{ book.title }}</a></td>
-                      <td>{{ book.author }}</td>
+                      <td><a href="{{ book.get_absolute_url }}">
+                        {% if book.title|length > 14 %}
+                            {{ book.title|slice:":14" }}...
+                        {% else %}
+                            {{ book.title }}
+                        {% endif %}
+                      </a></td>
+                      <td>
+                        {% if book.author|length > 20 %}
+                            {{ book.author|slice:":20" }}...
+                        {% else %}
+                            {{ book.author }}
+                        {% endif %}
+                      </td>
                       <td>{{ book.publication_date }}</td>
                       <td>{{ book.price }}$</td>
                       <td><a href="{% url 'update_book' book.id %}">Update</a></td>
@@ -63,8 +75,10 @@
         </div>
         <hr>
     {% else %}
-        <br>
-        <p>you don't register book in site .</p>
+        <hr>
+        <div class="alert alert-info" role="alert">
+          <p>you don't register book in site .</p>
+        </div>
     {% endif %}
     <br>
 {% endblock content %}
