@@ -19,3 +19,19 @@ def count_book(value, request):
     user = request.user
     list_book_in_cart = request.session[f'{user}_cart']
     return list_book_in_cart.count(book_id)
+
+
+@register.filter(name='time_strftime')
+def time_strftime(value):
+    return value.strftime('%Y-%m-%d %H:%M:%S')
+
+
+@register.filter(name="real_type")
+def real_type(value):
+    return eval(value)
+
+
+@register.filter(name='return_index')
+def return_index(value, index):
+    print(value, index-1)
+    return value[index-1]

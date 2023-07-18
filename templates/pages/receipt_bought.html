@@ -1,0 +1,126 @@
+{% extends '_base.html' %}
+{% load static %}
+{% load custom_filter %}
+
+{% block title %} Your Receipt {% endblock %}
+
+{% block link %}
+<link type="text/css" href="{% static 'css/book_list.css' %}" rel="stylesheet">
+<link type="text/css" href="{% static 'css/receipt.css' %}" rel="stylesheet">
+<link type="text/css" href="{% static 'css/pageination.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="{% static 'js/windwos.js' %}"></script>
+
+</script>
+{% endblock %}
+
+{% block content %}
+<h2>Your Receipts Buy</h2>
+<br>
+{% if receipts_buy %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+              <th scope="col">Time Buy</th>
+              <th scope="col">Total Price</th>
+              <th scope="col">Tracking Code</th>
+              <th scope="col">more</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for receipt in receipts_buy %}
+                <tr>
+                  <td>{{ receipt.time_bought|time_strftime }}</td>
+                  <td>{{ receipt.total_price }} $</td>
+                  <td>{{ receipt.token }}</td>
+                  <td>
+                    <a href='#' onclick="openPopup({{ forloop.counter }})" data-target="#myPopup-{{ forloop.counter }}">click here</a>
+                  </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% for receipt in receipts_buy %}
+        <div id="myPopup-{{ forloop.counter }}" class="popup">
+              <div class="popup-content center">
+                <span class="close" onclick="closePopup({{ forloop.counter }})">&times;</span>
+                <h2 class="center">Buy Receipt </h2>
+                {% for s in  seller|return_index:forloop.counter %}
+                    <br><hr>
+                    <p>
+                      <span class='wnd_span_l'>Seller:</span>
+                      <span class='wnd_span_r'>{{ seller|return_index:forloop.parentloop.counter|return_index:forloop.counter }}</span>
+                    </p>
+                    <br><br>
+                    <p>
+                      <span class='wnd_span_l'>Title:</span>
+                      <span class='wnd_span_r'>
+                        {{ title|return_index:forloop.parentloop.counter|return_index:forloop.counter }}
+                      </span>
+                    </p>
+                    <br><br>
+                    <p>
+                      <span class='wnd_span_l'>Quantity:</span>
+                      <span class='wnd_span_r'>
+                        {{ quantity|return_index:forloop.parentloop.counter|return_index:forloop.counter }}
+                      </span>
+                    </p>
+                    <br><br>
+                    <p>
+                      <span class='wnd_span_l'>Price:</span>
+                      <span class='wnd_span_r'>
+                        {{ price|return_index:forloop.parentloop.counter|return_index:forloop.counter }}
+                      </span>
+                    </p>
+                {% endfor %}
+                <br><hr>
+                <p>
+                  <span class='wnd_span_l_impo'>Total Price:</span>
+                  <span class='wnd_span_r_impo'>{{ receipt.total_price }}</span>
+                </p>
+                <br>
+                <hr>
+                <p>
+                  <span class='wnd_span_l_impo'>Time Buy:</span>
+                  <span class='wnd_span_r_impo'>{{ receipt.time_bought }}</span>
+                </p>
+                <br>
+                <hr>
+                <p>
+                  <span class='wnd_span_l_impo'>Tracking Code:</span>
+                  <span class='wnd_span_r_impo'>{{ receipt.token }}</span>
+                </p>
+                <br><br>
+              </div>
+        </div>
+    {% endfor %}
+    <hr>
+    <div>
+        <h6 class="center">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+        </h6>
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li class="icon">
+                    <a href="?page={{ page_obj.previous_page_number }}">&laquo; Previous</a>
+                </li>
+            {% endif %}
+            {% if page_obj.has_next %}
+                <li class="icon">
+                    <a href="?page={{ page_obj.next_page_number }}">Next &raquo;</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+    <hr>
+{% else %}
+    <hr>
+    <div class="alert alert-info" role="alert">
+      <p>You have not made a buy .</p>
+    </div>
+{% endif %}
+<br>
+
+{% endblock %}

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  {% load static %}
+  {% load crispy_forms_tags %}
+  <head>
+    <meta charset="utf-8" />
+    <title>Payment</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1,
+      shrink-to-fit=no"
+    />
+    <!-- CSS -->
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
+    <link href="{% static 'css/payment.css' %}" rel="stylesheet" type="text/css">
+    <link rel="icon" type="image/x-icon" href="{% static 'img/pay.png' %}">
+  </head>
+<body class='body_custom'>
+<div class="container_custom">
+  <div class="alert alert-warning" id="info-msg" style="display:none">
+          <i class="fa fa-info-circle"></i>
+          <span class="closebtn" onclick="this.parentElement.style.display='none';" dir="rtl">&times;</span>
+          <div id="message"></div>
+    </div>
+    <div class="alert alert-primary hide" role="alert" id="load">
+          <i class="fa fa-info-circle"></i>
+          <span class="closebtn" onclick="this.parentElement.style.display='none';" dir="rtl">&times;</span>
+          <div id="load-message"></div>
+    </div>
+    <div class="alert alert-danger" id="error" style="display:none">
+          <i class="fa fa-info-circle"></i>
+          <span class="closebtn" onclick="this.parentElement.style.display='none';" dir="rtl">&times;</span>
+          <div id="message-error"></div>
+    </div>
+    {% if messages %}
+        {% for message in messages %}
+                  {% if message.tags == 'error' %}
+                          <div class="alert alert-danger" role="alert">
+                              <span class="closebtn" onclick="this.parentElement.style.display='none';" dir="rtl">&times;</span>
+                                {{ message }}
+                          </div>
+                  {% endif %}
+        {% endfor %}
+    {% endif %}
+  <h2 class='h2_custom'>Payment Simulator</h2>
+  <form method="POST" id="my-form">
+    {% csrf_token %}
+
+    <div class="form-group">
+      <label for="cardNumber">{{ form.email.label }}:</label>
+      {{ form.email }}
+    </div>
+    <div class="form-group">
+      <label for="expiryDate">{{ form.phone_number.label }}:</label>
+      {{ form.phone_number }}
+    </div>
+    <div class="form-group">
+      <label for="amount">Amount:</label>
+      <input type="text" id="amount" name="amount" class='custom-input'
+      placeholder="Enter payment amount" value="{{ total_price }}" readonly>
+    </div>
+    <div class="form-group">
+        <label for="cvv">{{ form.unique_code.label }}:</label>
+        <span class="input-with-button">
+          {{ form.unique_code }}
+          <a type="submit" class="get-code-button" name="result" id="send-link"
+          href="{% url 'get_code' %}">GetCode
+        </a>
+        </span>
+    </div>
+    <div id="timer" class="hide help"></div>
+    <br>
+    <button type="submit" class="btn">Submit Payment</button>
+  </form>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script src="{% static 'js/payment.js' %}" type="text/javascript"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</body>
+</html>

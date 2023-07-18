@@ -1,37 +1,27 @@
 .pagination {
-  margin: 7px 0 15px 0;
-}
-.pagination,
-.pagination li a {
   display: flex;
-  align-items: center;
   justify-content: center;
-  flex-wrap: wrap;
-}
-.pagination li {
   list-style: none;
+  padding: 0;
 }
+
+.pagination li {
+  margin: 0 5px;
+}
+
 .pagination li a {
   text-decoration: none;
-  height: 50px;
-  width: 50px;
-  font-size: 17px;
-  padding-top: 1px;
-  border-right-width: 0px;
+  color: #333;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 5px 10px;
+  border-radius: 7px;
+  transition: background-color 0.3s ease;
 }
-.pagination li:last-child a {
-  border-right-width: 1px;
-}
-.pagination li a:focus,
 
-.pagination li.icon a {
-  min-width: 120px;
-}
-.pagination li:first-child span {
-  padding-right: 8px;
-}
-.pagination li:last-child span {
-  padding-left: 8px;
+.pagination li a:hover {
+  background-color: #064F44;
+  color: white;
 }
 
 .center {
