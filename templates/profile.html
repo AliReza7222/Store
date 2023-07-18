@@ -75,6 +75,15 @@
                         </div>
                       </div>
                       <hr><br>
+                      <div class="row d-flex align-items-center">
+                        <div class="col-sm-3">
+                          <h6 class="mb-0">Your Money</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                          {{ user.profile.money }} $
+                        </div>
+                      </div>
+                      <hr><br>
                       <div class="row">
                         <div class="col-sm-3">
                           <h6 class="mb-0">Address</h6>
@@ -134,6 +143,15 @@
                         </div>
                         <div class="col-sm-9 text-secondary">
                             <a href="{% url 'my_fav' %}">click here</a>
+                        </div>
+                      </div>
+                      <hr><br>
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <h6 class="mb-0">My Receipt Buy</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                            <a href="{% url 'bought_receipt' %}">click here</a>
                         </div>
                       </div>
                       <hr><br>

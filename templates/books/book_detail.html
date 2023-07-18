@@ -21,17 +21,20 @@
     {% elif book.quantity == 0 %}
         <p><strong>Available amount :</strong> <strong style="color:red">it is finished</strong></p>
     {% endif %}
-    {% if user in book.favourites.all %}
-        <a href="{% url 'favourite_book' book.pk %}" class="btn btn-danger">Remove from Favourites</a>
-    {% else %}
-        <a href="{% url 'favourite_book' book.pk %}" class="btn btn-outline-primary">Add to Favourites</a>
-    {% endif %}<br><br>
-    {% if book in my_cart %}
-            <div class="alert alert-success" role="alert">
-                   This book has been added to your shopping cart, but you have not confirmed the purchase of the book !
-            </div>
-    {% else %}
-        <a href="{% url 'add_cart' book.pk %}" class="btn btn-green">Add to cart</a>
+
+    {% if user_book.email != request.user.email %}
+        {% if user in book.favourites.all %}
+            <a href="{% url 'favourite_book' book.pk %}" class="btn btn-danger">Remove from Favourites</a>
+        {% else %}
+            <a href="{% url 'favourite_book' book.pk %}" class="btn btn-outline-primary">Add to Favourites</a>
+        {% endif %}<br><br>
+        {% if book in my_cart %}
+                <div class="alert alert-success" role="alert">
+                       This book has been added to your shopping cart, but you have not confirmed the purchase of the book !
+                </div>
+        {% elif book not in my_cart and book.quantity > 0 %}
+            <a href="{% url 'add_cart' book.pk %}" class="btn btn-green">Add to cart</a>
+        {% endif %}
     {% endif %}
 </div>
 

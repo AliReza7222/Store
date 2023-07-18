@@ -26,43 +26,49 @@
             </div>
         </div>
         <hr><br>
-        <div class="row">
-                {% for book in book_list %}
-                      <div class="column">
-                              <a href="{{ book.get_absolute_url }}" class="book-title a-link2">
-                                  {% if book.title|length > 14 %}
-                                        <b>{{ book.title|slice:":14" }}....</b>
-                                  {% else %}
-                                        <b>{{ book.title }}</b>
-                                  {% endif %}
-                              </a>
-                              <a href="{{ book.get_absolute_url }}">
-                                  <img src="{{book.cover.url}}" class="cover_image_custom" alt="{{ book.title }}">
-                              </a>
-                              <br>
-                              <a href="{{ book.get_absolute_url }}" class="more-info a-link">more information</a>
-                        </div>
-                {% endfor %}
+        {% if book_list %}
+          <div class="row">
+                  {% for book in book_list %}
+                        <div class="column">
+                                <a href="{{ book.get_absolute_url }}" class="book-title a-link2">
+                                    {% if book.title|length > 14 %}
+                                          <b>{{ book.title|slice:":14" }}....</b>
+                                    {% else %}
+                                          <b>{{ book.title }}</b>
+                                    {% endif %}
+                                </a>
+                                <a href="{{ book.get_absolute_url }}">
+                                    <img src="{{book.cover.url}}" class="cover_image_custom" alt="{{ book.title }}">
+                                </a>
+                                <br>
+                                <a href="{{ book.get_absolute_url }}" class="more-info a-link">more information</a>
+                          </div>
+                  {% endfor %}
+          </div>
+          <br>
+      </div>
+      <hr>
+      <div>
+          <h6 class="center">
+                  Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} .
+          </h6>
+          <ul class="pagination">
+              {% if page_obj.has_previous %}
+                  <li class="icon">
+                      <a href="?page={{ page_obj.previous_page_number }}">&laquo; Previous</a>
+                  </li>
+              {% endif %}
+              {% if page_obj.has_next %}
+                  <li class="icon">
+                      <a href="?page={{ page_obj.next_page_number }}">Next &raquo;</a>
+                  </li>
+              {% endif %}
+          </ul>
+      </div>
+      <hr>
+    {% else %}
+        <div class="alert alert-primary" role="alert">
+          No books available!
         </div>
-        <br>
-    </div>
-    <hr>
-    <div>
-        <h6 class="center">
-                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} .
-        </h6>
-        <ul class="pagination">
-            {% if page_obj.has_previous %}
-                <li class="icon">
-                    <a href="?page={{ page_obj.previous_page_number }}">&laquo; Previous</a>
-                </li>
-            {% endif %}
-            {% if page_obj.has_next %}
-                <li class="icon">
-                    <a href="?page={{ page_obj.next_page_number }}">Next &raquo;</a>
-                </li>
-            {% endif %}
-        </ul>
-    </div>
-    <hr>
+    {% endif %}
 {% endblock content %}

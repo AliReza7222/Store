@@ -66,6 +66,9 @@
         <div class="alert alert-warning" role="alert">
             * The books in your shopping cart are not registered and may run out, so finalize the purchase as soon as possible.
         </div>
+        <div class="alert alert-warning" role="alert">
+            ** If you want to buy, these books will be sent to the profile address, if the address is invalid, update your address from the profile.
+        </div>
 
         <table class="table table-striped">
               <thead>
@@ -80,7 +83,9 @@
               </thead>
               <tbody>
                   <tr>
-                      <td><a href="#" class="continuo_a" methods="post"> <<<< </a></td>
+                      <td><a href="{% url 'payment_simulator' %}"
+                        target="_blank" class="continuo_a" methods="post"> payment
+                      </a>
                       <td></td>
                       <td></td>
                       <td></td>

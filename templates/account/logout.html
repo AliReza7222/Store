@@ -4,8 +4,10 @@
 {% block title %} Log Out {% endblock title %}
 
 {% block content %}
-    <h1 style="color: red">Log Out</h1>
-    <p>Are you sure you want to log out?</p>
+    <h1 style="color: red">Log Out</h1><hr>
+    <div class="alert alert-danger" role="alert">
+      Are you sure you want to log out?
+    </div>
     <form method="post" action="{% url 'account_logout' %}">
         {% csrf_token %}
         {{ form|crispy }}
