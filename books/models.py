@@ -1,8 +1,11 @@
 import uuid
+
+from decimal import Decimal
+
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth import get_user_model
-from accounts.models import User
+from accounts.models import User, Profile
 
 
 class Book(models.Model):
@@ -27,6 +30,18 @@ class Book(models.Model):
 
     def get_absolute_url(self):
         return reverse('book_detail', kwargs={'pk': str(self.pk)})
+
+    def sell_book(self, buyer):
+        if self.quantity == 0:
+            return 0
+        self.quantity -= 1
+        profile_seller = Profile.objects.get(user=self.user)
+        profile_seller.money += self.price
+        buyer.money -= self.price
+        buyer.save()
+        self.save()
+        profile_seller.save()
+        return 1
 
     def __str__(self):
         return self.title

@@ -22,6 +22,7 @@ class Profile(models.Model):
     )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=30)
+    money = models.DecimalField(max_digits=8, decimal_places=2, default=0, editable=False)
     last_name = models.CharField(max_length=40)
     gender = models.CharField(choices=GENDER_CHOICE, max_length=1)
     phone = models.CharField(max_length=11)

@@ -34,6 +34,7 @@ class BookListView(ListView):
     paginate_by = 20
     template_name = 'books/book_list.html'
     context_object_name = 'book_list'
+    ordering = ['-quantity']
 
 
 class BookDetailView(LoginRequiredMixin, FormMixin, DetailView):
@@ -50,6 +51,7 @@ class BookDetailView(LoginRequiredMixin, FormMixin, DetailView):
         if 'None' not in my_cart:
             my_cart = list(map(lambda book_id: Book.objects.get(id=book_id), my_cart))
         context['my_cart'] = my_cart
+        context['user_book'] = Book.objects.get(id=kwargs.get('pk')).user
         return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
@@ -85,6 +87,14 @@ class UpdateBook(LoginRequiredMixin, UpdateView):
             messages.error(request, "you don't enter this page .")
             return redirect('books')
         return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        book = Book.objects.get(id=kwargs.get('pk'))
+        message = f"Book {book.title} updated successfully ."
+        messages.success(request, message)
+        self.success_url = "/books/mybooks/"
+        return super().post(request, *args, **kwargs)
 
 
 class DeleteBook(LoginRequiredMixin, DeleteView):
