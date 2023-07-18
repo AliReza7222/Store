@@ -16,7 +16,7 @@
   padding: 20px;
   border: 10px;
   border-radius: 8px;
-  width: 60%;
+  width: 40%;
   height: auto;
 }
 
@@ -50,5 +50,5 @@
 
 .wnd_span_r_impo{
   float: right;
-  color: red;
+  color: green;
 }

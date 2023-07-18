@@ -10,7 +10,7 @@ from django.http import JsonResponse, HttpResponseRedirect, Http404
 from django.views.generic import TemplateView, FormView, RedirectView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import BoughtReceipt
+from .models import BoughtReceipt, SoldReceipt
 from .forms import PaymentForm
 from .script import Token
 from .mixins import CheckQuantityMixin
@@ -61,10 +61,9 @@ class PaymentSimulator(LoginRequiredMixin, CheckQuantityMixin, FormView):
             # error ---->>> receipt one seller with books
             dict_bought = {'seller':[], 'quantity': [], 'title':[], 'price':[]}
             for book, num_book in dict_books.items():
-                print(f"{book.price * num_book}", '1111111111')
                 dict_bought["seller"].append(book.user.id)
                 dict_bought['quantity'].append(f"{book.price} $ x {num_book}")
-                dict_bought['title'].append(f"{book.title[:15]}...")
+                dict_bought['title'].append(f"{book.title}")
                 dict_bought['price'].append(f"{book.price * num_book} $")
             get_code_token = obj_code_token.encoder('buy')
             client = user
@@ -119,8 +118,6 @@ class PaymentSimulator(LoginRequiredMixin, CheckQuantityMixin, FormView):
                     token_receipt_bought = receipt_bought.token
                     message = f'your shopping has been successfully with tracking code f{token_receipt_bought}.'
                     messages.success(request, message)
-                    # sell
-
                     return redirect('bought_receipt')
                 else:
                     cache.delete(str(user.id))
@@ -185,9 +182,58 @@ class ListBoughtReceipt(LoginRequiredMixin, ListView):
         for receipt in receipts_buy:
             message = eval(receipt.message)
             self.extra_context['seller'].append(
-                list(map(lambda user_id: User.objects.get(id=user_id), message.get('seller')))
+                list(map(lambda user_id: User.objects.get(id=user_id).profile, message.get('seller')))
             )
             self.extra_context['quantity'].append(message.get('quantity'))
             self.extra_context['title'].append(message.get('title'))
             self.extra_context['price'].append(message.get('price'))
+        return queryset
+
+
+class ListSoldReceipt(LoginRequiredMixin, ListView):
+    login_url = 'login'
+    model = SoldReceipt
+    paginate_by = 14
+    context_object_name = 'receipts_sell'
+    template_name = 'pages/receipt_sold.html'
+
+
+    def get_queryset(self):
+        user = self.request.user
+        get_receipt_sell = SoldReceipt.objects.filter(seller=user).order_by('-time_sold')
+        info = {}
+        self.extra_context = {}
+        self.extra_context['total_price'] = {}
+        for receipt in get_receipt_sell:
+            time_sold = str(receipt.time_sold.strftime('%Y-%m-%d %H:%M'))
+            client = receipt.client.profile
+            if time_sold not in info:
+                self.extra_context['total_price'][time_sold] = 0
+                info[time_sold] = {
+                    client: {
+                        'title': [],
+                        'price': [],
+                        'quantity':[],
+                        'token': [],
+                        'total_price': 0,
+                    },
+                }
+            elif time_sold in info:
+                if client not in info[time_sold]:
+                    info[time_sold][client] = {
+                            'title': [],
+                            'price': [],
+                            'quantity':[],
+                            'token': [],
+                            'total_price': 0,
+                    }
+
+            info[time_sold][client]['title'].append(receipt.title)
+            info[time_sold][client]['price'].append(receipt.price/receipt.quantity)
+            info[time_sold][client]['quantity'].append(receipt.quantity)
+            info[time_sold][client]['token'].append(receipt.token)
+            info[time_sold][client]['total_price'] +=  receipt.price
+            self.extra_context['total_price'][str(receipt.time_sold.strftime('%Y-%m-%d %H:%M'))] += receipt.price
+        queryset = get_receipt_sell
+        self.extra_context['info'] = info
         return queryset

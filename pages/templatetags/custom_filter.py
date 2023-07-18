@@ -33,5 +33,9 @@ def real_type(value):
 
 @register.filter(name='return_index')
 def return_index(value, index):
-    print(value, index-1)
     return value[index-1]
+
+
+@register.filter(name='return_value_dict')
+def return_value_dict(value, key):
+    return value[key]
