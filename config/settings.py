@@ -19,7 +19,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # config environs
 env = Env()
-env.read_env(str(BASE_DIR.joinpath('.envs', '.settings')))
+env.read_env(str(BASE_DIR.joinpath('.envs')))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -47,8 +47,9 @@ INSTALLED_APPS = [
     'allauth.account',
     'crispy_forms',
     'accounts',
-    'pages',
+    'pages.apps.PagesConfig',
     'books',
+    'cart',
 ]
 
 # django-allauth config
