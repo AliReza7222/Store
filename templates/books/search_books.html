@@ -5,6 +5,8 @@
 
 {% block link %}
         <link type="text/css" href="{% static 'css/book_list.css' %}" rel="stylesheet">
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 {% endblock link %}
 
 
@@ -14,16 +16,25 @@
     {% if books_list %}
         <div class="row">
                 {% for book in books_list %}
-                    <div class="column">
-                        <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
+                <div class="column">
+                        <a href="{{ book.get_absolute_url }}" class="book-title a-link2">
+                            {% if book.title|length > 14 %}
+                                  <b>{{ book.title|slice:":14" }}....</b>
+                            {% else %}
+                                  <b>{{ book.title }}</b>
+                            {% endif %}
+                        </a>
                         <a href="{{ book.get_absolute_url }}">
-                        <img src="{{book.cover.url}}" class="bookcover"
-                             alt="{{ book.title }}" style="width:200px;height:200px"></a><br>
-                        <a href="{{ book.get_absolute_url }}">more information </a>
-                    </div>
+                            <img src="{{book.cover.url}}" class="cover_image_custom" alt="{{ book.title }}">
+                        </a>
+                        <br>
+                        <a href="{{ book.get_absolute_url }}" class="more-info a-link">more information</a>
+                  </div>
                 {% endfor %}
         </div>
     {% else %}
-        <h5 style="color: red">Not Found Book .</h5>
+        <div class="alert alert-danger center_element"  role="alert">
+            Not Found Book !
+        </div>
     {% endif %}
 {% endblock content %}

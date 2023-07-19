@@ -14,6 +14,8 @@
 <div style="flex:1">
     <h2><a href="">{{ book.title }}</a></h2><br>
     <p><strong>Author :</strong> {{ book.author }}</p>
+    <p><strong>Own UserName :</strong> {{ book.user.username }}</p>
+    <p><strong>Own FullName :  </strong> {{ book.user.profile.first_name }}    {{ book.user.profile.last_name }}</p>
     <p><strong>Price :</strong> {{ book.price }}$</p>
     <p><strong>publication_date :</strong> {{ book.publication_date }}</p>
     {% if book.quantity > 0 %}
@@ -57,8 +59,8 @@
 <br><hr>
 
 <div style="word-wrap: break-word">
-<h3>Reviews</h3>
 {% if book.reviews.all %}
+<h3>Reviews</h3><hr>
     <ul>
     {% for review in book.reviews.all %}
         <li>
@@ -68,7 +70,9 @@
     {% endfor %}
     </ul>
 {% else %}
-    <p>No reviews have been registered yet.</p>
+    <div class="alert alert-info center_element" role="alert">
+        No reviews have been registered yet.
+    </div>
 {% endif %}
 </div>
 

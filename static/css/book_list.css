@@ -184,3 +184,8 @@ form.search::after {
     padding: 2px;
     margin: 0 5px;
   }
+
+.center_element{
+  text-align: center;
+
+}
