@@ -37,6 +37,7 @@ class PaymentSimulator(LoginRequiredMixin, CheckQuantityMixin, FormView):
     model = Profile
     form_class = PaymentForm
     template_name = 'pages/payment_simulator.html'
+    extra_context = {'sharge': False}
 
     def get(self, request, *args, **kwargs):
         total_price = get_total_price(request)
@@ -58,7 +59,6 @@ class PaymentSimulator(LoginRequiredMixin, CheckQuantityMixin, FormView):
         obj_code_token = Token()
         receipt = None
         if op == 'buy':
-            # error ---->>> receipt one seller with books
             dict_bought = {'seller':[], 'quantity': [], 'title':[], 'price':[]}
             for book, num_book in dict_books.items():
                 dict_bought["seller"].append(book.user.id)
@@ -69,8 +69,6 @@ class PaymentSimulator(LoginRequiredMixin, CheckQuantityMixin, FormView):
             client = user
             receipt = BoughtReceipt.objects.create(client=client,
                         message=f"{dict_bought}", token=get_code_token, total_price=str(total_price))
-        elif op == 'sell':
-            ...
         return receipt
 
     def post(self, request, *args, **kwargs):
@@ -133,6 +131,57 @@ class PaymentSimulator(LoginRequiredMixin, CheckQuantityMixin, FormView):
             message = get_error(form.errors)
             messages.error(request, message)
             return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+
+class ShargeAccount(LoginRequiredMixin, FormView):
+    login_url = 'login'
+    model = Profile
+    form_class = PaymentForm
+    template_name = 'pages/payment_simulator.html'
+    extra_context = {'sharge': True}
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        form = PaymentForm(request.POST)
+        amount_money = int(request.POST.get('amount'))
+
+        if form.is_valid():
+            data = form.cleaned_data
+            error = False
+            message = None
+            if not Profile.objects.filter(user__email = data.get('email'), phone = data.get('phone_number')).exists():
+                message = 'phone number or email is not for you'
+                error = True
+
+            elif cache.get(str(user.id)) != data.get('unique_code') and cache.get(str(user.id)) != None:
+                message = 'invalid unique code !'
+                error = True
+
+            elif cache.get(str(user.id)) == None:
+                error = True
+
+            if error:
+                cache.delete(str(user.id))
+                if message:
+                    messages.error(request, message)
+                messages.error(request, f'Your unique code has expired !')
+                return HttpResponseRedirect(request.META['HTTP_REFERER'])
+            # if not exists error
+            account_profile = user.profile
+            account_profile.money += amount_money
+            account_profile.save()
+            message = f"Your money account has increased by {amount_money} $ ."
+            messages.success(request, message)
+            return redirect('profile')
+
+        else:
+            if cache.get(str(user.id)) != None:
+                cache.delete(str(user.id))
+                messages.error(request, f'Your unique code has expired !')
+            message = get_error(form.errors)
+            messages.error(request, message)
+            return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
 
 
 class SendCode(LoginRequiredMixin, RedirectView):

@@ -5,7 +5,7 @@ $(document).ready(function() {
         $('#load').removeClass('hide');
         e.preventDefault(); // prevent the link from navigating to a new page
         $.ajax({
-            url: 'get_code/', // replace with your own URL
+            url: '/get_code/', // replace with your own URL
             type: 'GET',
             dataType: 'json',
             success: function(response) {
