@@ -12,7 +12,7 @@ decorator==5.1.1
 defusedxml==0.7.1
 dj-database-url==1.0.0
 dj-email-url==1.0.5
-Django==4.1.1
+Django==4.1.10
 django-allauth==0.51.0
 django-cache-url==3.4.2
 django-crispy-forms==1.14.0
