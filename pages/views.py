@@ -60,13 +60,20 @@ class PaymentSimulator(LoginRequiredMixin, CheckQuantityMixin, FormView):
         receipt = None
         if op == 'buy':
             dict_bought = {'seller':[], 'quantity': [], 'title':[], 'price':[]}
+            message_sell = "You have sold a book, you can check the sales receipt in your profile."
+            subject_email = "BookStore"
+            from_email = settings.DEFAULT_FROM_EMAIL
+            recipient_list = []
             for book, num_book in dict_books.items():
                 dict_bought["seller"].append(book.user.id)
                 dict_bought['quantity'].append(f"{book.price} $ x {num_book}")
                 dict_bought['title'].append(f"{book.title}")
                 dict_bought['price'].append(f"{book.price * num_book} $")
+                recipient_list.append(book.user.email)
             get_code_token = obj_code_token.encoder('buy')
             client = user
+            message_sell = "You have sold a book, you can check the sales receipt in your profile ."
+            send_mail(subject_email, message_sell, from_email, recipient_list)
             receipt = BoughtReceipt.objects.create(client=client,
                         message=f"{dict_bought}", token=get_code_token, total_price=str(total_price))
         return receipt
