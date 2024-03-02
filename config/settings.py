@@ -50,7 +50,7 @@ THIRD_PARTY_APPS = [
     'crispy_forms',
 ]
 LOCAL_APPS = [
-    'accounts.apps.AccountsConfig',
+    'users.apps.UsersConfig',
     'pages.apps.PagesConfig',
     'books.apps.BooksConfig',
     'cart.apps.CartConfig',
@@ -66,11 +66,11 @@ AUTHENTICATION_BACKENDS = {
     'allauth.account.auth_backends.AuthenticationBackend',
 }
 
-# Email Config 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# Email Config
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # EMAIL_HOST = env('EMAIL_HOST')
-EMAIL_USE_TLS = True
-EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_PORT = 587
 # EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 # EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 
@@ -79,6 +79,7 @@ ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_EMAIL_VERIFICATION = "none"
 DEFAULT_FROM_EMAIL = 'admin@djangobookstore.com'
 
 # django-crispy-forms
@@ -118,9 +119,8 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 DATABASES = {"default": env.db()}
 
-
 # Custom user
-AUTH_USER_MODEL = 'accounts.User'
+AUTH_USER_MODEL = 'users.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

@@ -5,7 +5,7 @@ from decimal import Decimal
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth import get_user_model
-from accounts.models import User, Profile
+from users.models import User, Profile
 
 
 class Book(models.Model):

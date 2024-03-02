@@ -14,7 +14,7 @@ from .models import BoughtReceipt, SoldReceipt
 from .forms import PaymentForm
 from .script import Token
 from .mixins import CheckQuantityMixin
-from accounts.models import Profile, User
+from users.models import Profile, User
 from books.models import Book
 from cart.views import get_total_price
 

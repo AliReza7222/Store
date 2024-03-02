@@ -9,7 +9,7 @@ from .models import SoldReceipt
 from decimal import Decimal
 from .script import Token
 from books.models import Book
-from accounts.models import User
+from users.models import User
 
 
 # create receipt sell for own book .
@@ -29,4 +29,3 @@ def sold_receipt(sender, instance, created, **kwargs):
         dict_info = {'price': price, 'client': client, 'seller': seller,
                 'title': title, 'token': token, 'quantity': quantity}
         SoldReceipt.objects.create(**dict_info)
-        
