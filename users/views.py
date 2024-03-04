@@ -19,7 +19,7 @@ class CreateProfile(LoginRequiredMixin, CreateView):
             Profile.objects.create(user_id=request.user.id, **form.cleaned_data)
             messages.success(request, 'Your profile has been created successfully . ')
             return redirect('users:profile')
-        return render(request, self.template_name, context={'form': form})
+        return render(request, self.get_template_names(), context={'form': form})
 
 
 class UpdateProfile(LoginRequiredMixin, UpdateView):
