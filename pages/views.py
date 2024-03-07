@@ -215,7 +215,7 @@ class SendCode(LoginRequiredMixin, RedirectView):
 
 
 class ListBoughtReceipt(LoginRequiredMixin, ListView):
-    login_url = 'login'
+    login_url = 'account_login'
     model = BoughtReceipt
     paginate_by = 14
     context_object_name = 'receipts_buy'
