@@ -154,7 +154,7 @@ class AddToCart(LoginRequiredMixin, RedirectView):
     login_url = 'account_login'
 
     def get(self, request, *args, **kwargs):
-        book = self.model.objects.get(pk=kwargs.get('book_pk'))
+        book = Book.objects.get(pk=kwargs.get('book_pk'))
         my_cart = request.session.get(f'{request.user}_cart', [])
         my_cart.append(str(book.id))
         request.session[f'{request.user}_cart'] = my_cart
