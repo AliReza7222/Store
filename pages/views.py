@@ -14,14 +14,10 @@ from .models import BoughtReceipt, SoldReceipt
 from .forms import PaymentForm
 from .script import Token
 from .mixins import CheckQuantityMixin
-from accounts.models import Profile, User
+from .utils import get_error
+from users.models import Profile, User
 from books.models import Book
-from cart.views import get_total_price
-
-
-def get_error(errors):
-    for field in errors:
-        return errors.get(field).as_text().lstrip('* ')
+from cart.utils import get_total_price
 
 
 class HomePageView(TemplateView):
@@ -33,7 +29,7 @@ class AboutPage(TemplateView):
 
 
 class PaymentSimulator(LoginRequiredMixin, CheckQuantityMixin, FormView):
-    login_url = 'login'
+    login_url = 'account_login'
     model = Profile
     form_class = PaymentForm
     template_name = 'pages/payment_simulator.html'
@@ -80,7 +76,7 @@ class PaymentSimulator(LoginRequiredMixin, CheckQuantityMixin, FormView):
 
     def post(self, request, *args, **kwargs):
         user = request.user
-        form = PaymentForm(request.POST)
+        form = self.get_form()
 
         if form.is_valid():
             data = form.cleaned_data
@@ -212,14 +208,14 @@ class SendCode(LoginRequiredMixin, RedirectView):
         from_email,
         recipient_list
         )
-        print(code)
+        print(code) # test project
         cache.set(str(user.id), str(code), 78)
         message_success_send = 'The payment code has been sent to your email !'
         return JsonResponse({'message': message_success_send})
 
 
 class ListBoughtReceipt(LoginRequiredMixin, ListView):
-    login_url = 'login'
+    login_url = 'account_login'
     model = BoughtReceipt
     paginate_by = 14
     context_object_name = 'receipts_buy'
@@ -247,7 +243,7 @@ class ListBoughtReceipt(LoginRequiredMixin, ListView):
 
 
 class ListSoldReceipt(LoginRequiredMixin, ListView):
-    login_url = 'login'
+    login_url = 'account_login'
     model = SoldReceipt
     paginate_by = 14
     context_object_name = 'receipts_sell'

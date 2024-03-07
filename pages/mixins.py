@@ -2,8 +2,6 @@ from books.models import Book
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 
-# custom mxin
-
 
 class CheckQuantityMixin:
 

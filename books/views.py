@@ -1,6 +1,7 @@
 from logging import Logger
 
 from django.shortcuts import redirect, render, get_object_or_404
+from django.urls import reverse_lazy
 from django.contrib import messages
 from django.db.models import Q
 from django.views.generic.edit import FormMixin
@@ -8,21 +9,21 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect, HttpResponseGone
 from .models import Book, Review
+from .mixins import *
 from .forms import ReviewForm, FormRegisterBook
 
 
 class RegisterBook(LoginRequiredMixin, CreateView):
     model = Book
-    login_url = '/accounts/login/'
+    login_url = 'account_login'
     template_name = 'books/register_book.html'
     form_class = FormRegisterBook
 
     def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST, request.FILES)
+        form = self.get_form()
         if form.is_valid():
-            user, cover = request.user, request.FILES.get('cover')
             data = form.cleaned_data
-            data['user'] = user
+            data['user'] = request.user
             Book.objects.create(**data)
             messages.success(request, 'your book has been successfully created .')
             return redirect('books')
@@ -39,7 +40,7 @@ class BookListView(ListView):
 
 class BookDetailView(LoginRequiredMixin, FormMixin, DetailView):
     model = Book
-    login_url = '/accounts/login/'
+    login_url = 'account_login'
     form_class = ReviewForm
     template_name = 'books/book_detail.html'
     context_object_name = 'book'
@@ -51,19 +52,17 @@ class BookDetailView(LoginRequiredMixin, FormMixin, DetailView):
         if 'None' not in my_cart:
             my_cart = list(map(lambda book_id: Book.objects.get(id=book_id), my_cart))
         context['my_cart'] = my_cart
-        context['user_book'] = Book.objects.get(id=kwargs.get('pk')).user
+        context['user_book'] = self.object.user
         return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
-        book = Book.objects.get(id=kwargs.get('pk'))
-        author = request.user
-        form = self.form_class(request.POST)
+        self.object = self.get_object()
+        form = self.get_form()
         if form.is_valid():
-            review = form.cleaned_data.get('review')
             Review.objects.create(
-                book=book,
-                author=author,
-                review=review
+                book=self.object,
+                author=request.user,
+                review=form.cleaned_data.get('review')
             )
             messages.success(request, 'Your comment has been successfully created.')
             return redirect('book_detail', pk=kwargs.get('pk'))
@@ -71,59 +70,41 @@ class BookDetailView(LoginRequiredMixin, FormMixin, DetailView):
         return redirect('book_detail', pk=kwargs.get('pk'))
 
 
-class UpdateBook(LoginRequiredMixin, UpdateView):
-    login_url = '/accounts/login/'
+class UpdateBook(LoginRequiredMixin, CheckOwnerMixin, UpdateView):
     model = Book
+    login_url = 'account_login'
     form_class = FormRegisterBook
     template_name = 'books/register_book.html'
     extra_context = {'update': True}
     context_object_name = 'books'
 
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        user = request.user
-        obj_book = Book.objects.get(pk=kwargs.get('pk'))
-        if user != obj_book.user:
-            messages.error(request, "you don't enter this page .")
-            return redirect('books')
-        return super().get(request, *args, **kwargs)
-
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        book = Book.objects.get(id=kwargs.get('pk'))
-        message = f"Book {book.title} updated successfully ."
-        messages.success(request, message)
+        messages.success(
+            request,
+            f"Book {self.object.title} updated successfully ."
+        )
         self.success_url = "/books/mybooks/"
         return super().post(request, *args, **kwargs)
 
 
-class DeleteBook(LoginRequiredMixin, DeleteView):
+class DeleteBook(LoginRequiredMixin, CheckOwnerMixin, DeleteView):
     model = Book
-    login_url = '/accounts/login/'
+    login_url = 'account_login'
     template_name = 'books/delete_object.html'
     context_object_name = 'book'
-    success_url = '/books/'
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        user = request.user
-        obj_book = Book.objects.get(pk=kwargs.get('pk'))
-        if user != obj_book.user:
-            messages.error(request, "you don't enter this page .")
-            return redirect('books')
-        return super().get(request, *args, **kwargs)
+    success_url = reverse_lazy('mybooks')
 
 
 class MyBooks(LoginRequiredMixin, ListView):
-    login_url = '/accounts/login/'
+    login_url = 'account_login'
     paginate_by = 30
     model = Book
     template_name = 'books/my_books.html'
     context_object_name = 'books'
 
     def get_queryset(self):
-        user = self.request.user
-        my_books = self.model.objects.filter(user=user)
+        my_books = self.model.objects.filter(user=self.request.user)
         return my_books
 
 
@@ -134,13 +115,13 @@ class SearchBook(ListView):
 
     def get_queryset(self):
         query_key = self.request.GET.get('search_input')
-        return Book.objects.filter(
+        return self.model.objects.filter(
             Q(title__icontains=query_key)
         )
 
 
 class FavouriteBook(LoginRequiredMixin, FormView):
-    login_url = '/accounts/login/'
+    login_url = 'account_login'
     model = Book
     template_name = 'books/book_detail.html'
 
@@ -157,7 +138,7 @@ class FavouriteBook(LoginRequiredMixin, FormView):
 
 
 class MyFavouriteBooks(LoginRequiredMixin, ListView):
-    login_url = 'login'
+    login_url = 'account_login'
     model = Book
     template_name = 'books/my_fav.html'
     context_object_name = 'books'
@@ -170,12 +151,13 @@ class MyFavouriteBooks(LoginRequiredMixin, ListView):
 
 
 class AddToCart(LoginRequiredMixin, RedirectView):
+    login_url = 'account_login'
+
     def get(self, request, *args, **kwargs):
-        user = request.user
         book = Book.objects.get(pk=kwargs.get('book_pk'))
-        my_cart = request.session.get(f'{user}_cart', [])
+        my_cart = request.session.get(f'{request.user}_cart', [])
         my_cart.append(str(book.id))
-        request.session[f'{user}_cart'] = my_cart
+        request.session[f'{request.user}_cart'] = my_cart
         message = f'book {book} add to your cart .'
         messages.success(request, message)
         return HttpResponseRedirect(request.META['HTTP_REFERER'])

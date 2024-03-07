@@ -5,54 +5,54 @@ from django.http import HttpResponseRedirect
 from django.contrib import messages
 
 from books.models import Book
-
-
-def get_total_price(request):
-    user = request.user
-    my_cart = list(map(lambda book_id: Book.objects.get(id=book_id), request.session.get(f'{user}_cart', [])))
-    total_price = 0
-    for book in my_cart:
-        total_price += book.price
-    return total_price
+from .utils import *
 
 
 class CartShopping(LoginRequiredMixin, RedirectView):
+    login_url = 'account_login'
 
-    def uniq_list(self, value):
+    def get(self, request, *args, **kwargs):
+        context = dict()
+        my_cart = list(
+            map(
+                lambda book_id: Book.objects.get(id=book_id),
+                request.session.get(f'{request.user}_cart', [])
+            )
+        )
+        context['total_price'] = get_total_price(request)
+        context['my_cart'] = self.uniqe_list(my_cart)
+        return render(request, 'cart/my_cart.html', context=context)
+
+    def uniqe_list(self, value):
         new_list = list()
         for index_value in value:
             if index_value not in new_list:
                 new_list.append(index_value)
         return new_list
 
-    def get(self, request, *args, **kwargs):
-        user = request.user
-        context = dict()
-        my_cart = list(map(lambda book_id: Book.objects.get(id=book_id), request.session.get(f'{user}_cart', [])))
-        total_price = get_total_price(request)
-        context['total_price'] = total_price
-        context['my_cart'] = self.uniq_list(my_cart)
-        return render(request, 'cart/my_cart.html', context=context)
 
 
 class RemoveFromCart(LoginRequiredMixin, RedirectView):
+    login_url = 'account_login'
 
     def get(self, request, *args, **kwargs):
-        user = request.user
-        book_id = str(Book.objects.get(pk=kwargs.get('book_pk')).id)
-        book = Book.objects.get(id=book_id)
-        my_cart = request.session.get(f'{user}_cart')
-        del my_cart[my_cart.index(book_id)]
-        request.session[f'{user}_cart'] = my_cart
-        message = f'book {book} remove from your cart .'
-        messages.success(request, message)
+        book = Book.objects.get(id=kwargs.get('book_pk'))
+        self.remove_book_from_cart(book)
+        messages.success(request, f'book {book} remove from your cart .')
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+    def remove_book_from_cart(self, book):
+        cart = self.request.session.get(f'{self.request.user}_cart')
+        for book_id in cart.copy():
+            if book_id == str(book.id):
+                del cart[cart.index(book_id)]
+        self.request.session[f'{self.request.user}_cart'] = cart
 
 
 class IncrementDecrementBook(LoginRequiredMixin, RedirectView):
+    login_url = 'account_login'
 
     def get(self, request, *args, **kwargs):
-        user = request.user
         op, id_book = kwargs.get('op'), str(kwargs.get('id_book'))
         book = Book.objects.get(id=id_book)
         my_cart = request.session[f'{request.user}_cart']
